@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
   TouchableHighlight,
   Alert,
 } from "react-native";
@@ -44,8 +45,7 @@ const InputChat = ({
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
+      allowsEditing: false,
     });
     console.log(result);
     if (!result.canceled) {
@@ -64,10 +64,6 @@ const InputChat = ({
     }
   };
 
-  const modelHandler = () => {
-    setModalVisible(!modalVisible);
-  };
-
   return (
     <View style={styles.InputContainer}>
       <View style={{ alignItems: "center", flexDirection: "row", gap: 10 }}>
@@ -76,7 +72,7 @@ const InputChat = ({
             name="plus"
             size={24}
             color="white"
-            onPress={modelHandler}
+            onPress={() => setModalVisible(true)}
           />
         </TouchableOpacity>
         <TextInput
@@ -121,90 +117,117 @@ const InputChat = ({
         isVisible={modalVisible}
         onClose={() => setModalVisible(false)}
       >
-        <View
-          style={{
-            alignItems: "center",
-            gap: 30,
-            flexDirection: "row",
-            padding: 20,
-            justifyContent: "space-evenly",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <TouchableOpacity
+        {imageUri ? (
+          <View
             style={{
-              justifyContent: "center",
               alignItems: "center",
-              padding: 10,
-              borderRadius: 50,
-              width: 50,
-              height: 50,
-              borderWidth: 1,
-              backgroundColor: "#000000",
+              flexDirection: "column",
+              padding: 20,
+              width: "100%",
+              height: "100%",
             }}
-            onPress={pickImage}
           >
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "center",
-              }}
-            >
-              <Octicons name="image" size={30} color="white" />{" "}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+            <Image
+              style={styles.imageMessage}
+              source={{ uri: imageUri }}
+              resizeMode="contain"
+            />
+            <TouchableOpacity>
+              <MaterialIcons
+                onPress={() => sendMessageHandler("normal")}
+                name="send"
+                onLongPress={() => sendMessageHandler("long")}
+                size={24}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View
             style={{
-              justifyContent: "center",
               alignItems: "center",
-              padding: 10,
-              borderRadius: 50,
-              width: 50,
-              height: 50,
-              borderWidth: 1,
-              backgroundColor: "#000000",
+              gap: 30,
+              flexDirection: "row",
+              padding: 40,
+              justifyContent: "space-evenly",
+              width: "100%",
+              height: "100%",
             }}
-            onPress={pickImage}
           >
-            <Text
+            <TouchableOpacity
               style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+                borderRadius: 50,
+                width: 50,
+                height: 50,
+                borderWidth: 1,
+                backgroundColor: "#000000",
               }}
+              onPress={pickImage}
             >
-              <Octicons name="video" size={30} color="white" />{" "}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 10,
-              borderRadius: 50,
-              width: 50,
-              height: 50,
-              borderWidth: 1,
-              backgroundColor: "#000000",
-            }}
-            onPress={pickDocument}
-          >
-            <Text
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  textAlign: "center",
+                }}
+              >
+                <Octicons name="image" size={30} color="white" />{" "}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 20,
-                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+                borderRadius: 50,
+                width: 50,
+                height: 50,
+                borderWidth: 1,
+                backgroundColor: "#000000",
               }}
+              onPress={pickImage}
             >
-              <Octicons name="file" size={30} color="white" />{" "}
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  textAlign: "center",
+                }}
+              >
+                <Octicons name="video" size={30} color="white" />{" "}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 10,
+                borderRadius: 50,
+                width: 50,
+                height: 50,
+                borderWidth: 1,
+                backgroundColor: "#000000",
+              }}
+              onPress={pickDocument}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  textAlign: "center",
+                }}
+              >
+                <Octicons name="file" size={30} color="white" />{" "}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </Model>
     </View>
   );
@@ -216,11 +239,14 @@ const styles = StyleSheet.create({
   InputContainer: {
     paddingHorizontal: 20,
     paddingTop: 12,
-
     height: 66,
     backgroundColor: "#333333",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+  },
+  imageMessage: {
+    width: 200,
+    height: 200,
   },
 });

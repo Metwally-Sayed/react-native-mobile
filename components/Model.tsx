@@ -18,7 +18,9 @@ export default function Model({ isVisible, children, onClose, title }: Props) {
             <MaterialIcons name="close" color="#fff" size={22} />
           </Pressable>
         </View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>{children}</View>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          {children}
+        </View>
       </View>
     </Modal>
   );
@@ -26,7 +28,7 @@ export default function Model({ isVisible, children, onClose, title }: Props) {
 
 const styles = StyleSheet.create({
   modalContent: {
-    height: "25%",
+    height: "auto",
     width: "100%",
     backgroundColor: "#191b1d",
     borderTopRightRadius: 18,
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   titleContainer: {
-    height: "16%",
+    height: 25,
     backgroundColor: "#333333",
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
